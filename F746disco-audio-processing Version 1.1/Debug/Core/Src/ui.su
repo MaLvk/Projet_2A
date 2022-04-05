@@ -1,0 +1,10 @@
+ui.c:38:6:uiDisplayBasic	16	static
+ui.c:71:13:printDelay	40	static
+ui.c:79:13:printFeedback	40	static
+ui.c:87:13:printVolume	40	static
+ui.c:98:6:uiSliderDelay	72	static
+ui.c:135:6:uiSliderFeed	72	static
+ui.c:169:6:uiSliderVolume	80	static
+ui.c:207:6:uiDisplayInputLevel	80	static
+ui.c:237:6:uiDisplaySpectrum	24	static
+ui.c:265:6:uiDisplayMaster	24	static
