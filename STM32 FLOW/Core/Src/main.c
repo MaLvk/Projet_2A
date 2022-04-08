@@ -859,7 +859,7 @@ static void MX_SAI2_Init(void)
 	hsai_BlockA2.Init.OutputDrive = SAI_OUTPUTDRIVE_ENABLE;
 	hsai_BlockA2.Init.NoDivider = SAI_MASTERDIVIDER_ENABLE;
 	hsai_BlockA2.Init.FIFOThreshold = SAI_FIFOTHRESHOLD_1QF;
-	hsai_BlockA2.Init.AudioFrequency = SAI_AUDIO_FREQUENCY_16K; // SAI_AUDIO_FREQUENCY_48K;
+	hsai_BlockA2.Init.AudioFrequency = SAI_AUDIO_FREQUENCY_8K; // SAI_AUDIO_FREQUENCY_48K;
 	hsai_BlockA2.Init.SynchroExt = SAI_SYNCEXT_DISABLE;
 	hsai_BlockA2.Init.MonoStereoMode = SAI_STEREOMODE;
 	hsai_BlockA2.Init.CompandingMode = SAI_NOCOMPANDING;
@@ -1717,11 +1717,6 @@ void StartDefaultTask(void const * argument)
 	audioLoop();
 	//uint32_t PreviousWakeTime = osKernelSysTick();
 	/* Infinite loop */
-	int i=0;
-	for(;;)
-	{
-
-	}
 
 	// In case we accidentally exit from task loop
 	osThreadTerminate(NULL);
@@ -1736,6 +1731,18 @@ void StartDefaultTask(void const * argument)
  * @retval None
  */
 /* USER CODE END Header_startUITask */
+void uiDisplayBasic(void) {
+
+	LCD_Clear(LCD_COLOR_WHITE);
+
+	LCD_SetStrokeColor(LCD_COLOR_BLACK);
+	LCD_SetBackColor(LCD_COLOR_WHITE);
+	LCD_SetFont(&Font16);
+
+}
+
+
+
 void startUITask(void const * argument)
 {
 	/* USER CODE BEGIN startUITask */
@@ -1747,11 +1754,6 @@ void startUITask(void const * argument)
 	for(;;)
 	{
 		osSignalWait (0x0001, osWaitForever);
-		uiDisplaySpectrum();
-		uiDisplayMaster();
-		uiSliderDelay();
-		uiSliderFeed();
-		uiSliderVolume();
 
 	}
 

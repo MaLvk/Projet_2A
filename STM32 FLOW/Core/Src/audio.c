@@ -65,10 +65,6 @@ extern DMA_HandleTypeDef hdma_sai2_b;
 
 extern osThreadId defaultTaskHandle;
 extern osThreadId uiTaskHandle;
-extern delayMs;
-extern delayFeed;
-extern volume;
-
 
 // ---------- communication b/w DMA IRQ Handlers and the main while loop -------------
 
@@ -83,7 +79,7 @@ uint32_t audio_rec_buffer_state;
 // ---------- DMA buffers ------------
 
 // whole sample count in an audio frame: (beware: as they are interleaved stereo samples, true audio frame duration is given by AUDIO_BUF_SIZE/2)
-#define AUDIO_BUF_SIZE   ((uint32_t)512)
+#define AUDIO_BUF_SIZE   ((uint32_t)1024)
 /* size of a full DMA buffer made up of two half-buffers (aka double-buffering) */
 #define AUDIO_DMA_BUF_SIZE   (2 * AUDIO_BUF_SIZE)
 
@@ -111,18 +107,9 @@ uint32_t scratch_offset = 0; // see doc in processAudio()
 // ------------ Private Function Prototypes ------------
 
 static void processAudio(int16_t*, int16_t*);
-static void accumulateInputLevels();
-static float readFromAudioScratch(int pos);
-static void writeToAudioScratch(float val, int pos);
 
 
-// ----------- Local vars ------------
-
-static int count = 0; // debug
-static int posScratch = 0;
-static int fillScratch = 0;
-static double inputLevelL = 0;
-static double inputLevelR = 0;
+// ----------- Local vars ------
 double inputLevelLavr;
 double inputLevelRavr;
 
@@ -156,17 +143,6 @@ void audioLoop() {
 	/* main audio loop */
 	while (1) {
 
-		accumulateInputLevels();
-		count++;
-		if (count >= 20) {
-			count = 0;
-			inputLevelLavr = inputLevelL * 0.05;
-			inputLevelRavr = inputLevelR * 0.05;
-			//osSignalSet(uiTaskHandle, 0x0002);
-			//uiDisplayInputLevel(inputLevelL, inputLevelR);
-			inputLevelL = 0.;
-			inputLevelR = 0.;
-		}
 
 		osSignalWait (0x0002, osWaitForever);
 		/* Wait until first half block has been recorded */
@@ -196,31 +172,6 @@ void audioLoop() {
  * with left channel samples at even positions,
  * and right channel samples at odd positions.
  */
-static void accumulateInputLevels() {
-
-	// Left channel:
-	uint32_t lvl = 0;
-	for (int i = 0; i < AUDIO_DMA_BUF_SIZE; i += 2) {
-		int16_t v = (int16_t) buf_input[i];
-		if (v > 0)
-			lvl += v;
-		else
-			lvl -= v;
-	}
-	inputLevelL += (double) lvl / AUDIO_DMA_BUF_SIZE / (1 << 15);
-
-	// Right channel:
-	lvl = 0;
-	for (int i = 1; i < AUDIO_DMA_BUF_SIZE; i += 2) {
-		int16_t v = (int16_t) buf_input[i];
-		if (v > 0)
-			lvl += v;
-		else
-			lvl -= v;
-	}
-	inputLevelR += (double) lvl / AUDIO_DMA_BUF_SIZE / (1 << 15);
-
-}
 
 //----------------------------FFT---------------------------------------
 
@@ -251,44 +202,14 @@ void HAL_SAI_RxHalfCpltCallback(SAI_HandleTypeDef *hsai) {
 /**
  * Read a sample from the audio scratch buffer in SDRAM at position "pos"
  */
-static float readFromAudioScratch(int pos) {
 
-	__IO float *pSdramAddress = (float*) AUDIO_SCRATCH_ADDR;
-	pSdramAddress += pos;
-	return *(__IO float*) pSdramAddress;
-
-}
-
-/**
- * Write the given value to the audio scratch buffer in SDRAM at position "pos"
- */
-static void writeToAudioScratch(float val, int pos) {
-
-	__IO float *pSdramAddress = (float*) AUDIO_SCRATCH_ADDR;
-	pSdramAddress += pos;
-	*(__IO float*) pSdramAddress = val;
-
-}
 
 /**
  * Write the given value to the audio scratch buffer in SDRAM at position "pos"
  */
 
 
-/**
-static void writeToAudioScratchINT16(int16_t val, int pos) {
-	__IO int16_t *pSdramAddress = (int16_t*) AUDIO_SCRATCH_ADDR;
-	pSdramAddress += pos;
-	*(__IO int16_t*) pSdramAddress = val;
-}
 
-static int16_t readFromAudioScratchINT16(int16_t val, int pos) {
-	__IO int16_t *pSdramAddress = (int16_t*) AUDIO_SCRATCH_ADDR;
-		pSdramAddress += pos;
-		return *(__IO int16_t*) pSdramAddress;
-}
-
-*/
 
 // --------------------------- AUDIO ALGORITHMS ---------------------------
 
@@ -299,41 +220,22 @@ static int16_t readFromAudioScratchINT16(int16_t val, int pos) {
  * (keep in mind that this number represents interleaved L and R samples,
  * hence the true corresponding duration of this audio frame is AUDIO_BUF_SIZE/2 divided by the sampling frequency).
  */
+static void printIndex(uint32_t x){
+	char index_char[10];
+	sprintf(index_char, "%lu %% ",x);
+	uint16_t X = LCD_SCREEN_WIDTH/2;
+	uint16_t Y = 120;
+	LCD_DrawString(X,Y,(uint8_t *)index_char, LEFT_MODE, true);
+}
+
+
+
 
 static void processAudio(int16_t *out, int16_t *in) {
 
 	LED_On(); // for oscilloscope measurements...
 
-	/* 16KHz -> 1000ms*16 = 1s*/
-	int delay = (int) 16 * delayMs;
 
-	for (int n = 0; n < AUDIO_BUF_SIZE; n++) {
-
-		//modulo AUDIO_SCRATCH_SIZE
-		if(posScratch>AUDIO_SCRATCH_SIZE-1){
-			posScratch=0;
-		}
-
-		if(fillScratch<delay){
-			writeToAudioScratch((float)in[n],posScratch);
-			posScratch+=1;
-			out[n] = (in[n]*volume)/100;
-			fillScratch+=1;
-		}else{
-			int j = posScratch-delay;
-
-			if(j<0){
-				j=j+AUDIO_SCRATCH_SIZE;
-			}
-			/* old:  */
-			int16_t old = (int16_t) readFromAudioScratch(j);
-
-			float new = in[n]+(float)old/100*(delayFeed);
-			writeToAudioScratch((float)new,posScratch);
-			posScratch+=1;
-			out[n]= (new*volume)/100;
-		}
-	}
 	/* array copy */
 	for(int i=0;i<FFTLength;i++){
 		FFTInput[i]=(float32_t) out[i*2]/32738;
@@ -343,7 +245,7 @@ static void processAudio(int16_t *out, int16_t *in) {
 	arm_cmplx_mag_f32(FFTOutput,FFTOutputMag,FFTLength/2);
 
 	osSignalSet(uiTaskHandle, 0x0001);
-
+	printIndex(FFTOutputMag[0]);
 	LED_Off();
 }
 

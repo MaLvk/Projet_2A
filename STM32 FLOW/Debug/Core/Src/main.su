@@ -28,7 +28,8 @@ main.c:1401:13:MX_DMA_Init	16	static
 main.c:1443:13:MX_FMC_Init	40	static
 main.c:1496:13:MX_GPIO_Init	72	static
 main.c:1694:6:Error	16	static
-main.c:1710:6:StartDefaultTask	24	static
-main.c:1739:6:startUITask	32	static
-main.c:1772:6:HAL_TIM_PeriodElapsedCallback	16	static
-main.c:1789:6:Error_Handler	8	static
+main.c:1710:6:StartDefaultTask	16	static
+main.c:1734:6:uiDisplayBasic	8	static
+main.c:1746:6:startUITask	32	static
+main.c:1774:6:HAL_TIM_PeriodElapsedCallback	16	static
+main.c:1791:6:Error_Handler	8	static

@@ -7,8 +7,6 @@
 "./Core/Src/syscalls.o"
 "./Core/Src/sysmem.o"
 "./Core/Src/system_stm32f7xx.o"
-"./Core/Src/test.o"
-"./Core/Src/ui.o"
 "./Core/Src/bsp/disco_base.o"
 "./Core/Src/bsp/disco_i2c.o"
 "./Core/Src/bsp/disco_lcd.o"

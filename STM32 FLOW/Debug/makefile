@@ -79,8 +79,8 @@ all: main-build
 main-build: F746disco-audio-processing-RTOS-TP-SIA.elf secondary-outputs
 
 # Tool invocations
-F746disco-audio-processing-RTOS-TP-SIA.elf: $(OBJS) $(USER_OBJS) /Users/jimmypan/Downloads/SIA_TP_Audio_2021Nov/F746disco-audio-processing-RTOS-TP-SIA/STM32F746NGHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "F746disco-audio-processing-RTOS-TP-SIA.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/Users/jimmypan/Downloads/SIA_TP_Audio_2021Nov/F746disco-audio-processing-RTOS-TP-SIA/STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F746disco-audio-processing-RTOS-TP-SIA.map" -Wl,--gc-sections -static -L"/Users/jimmypan/Downloads/SIA_TP_Audio_2021Nov/F746disco-audio-processing-RTOS-TP-SIA/Drivers/CMSIS/Lib/GCC" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+F746disco-audio-processing-RTOS-TP-SIA.elf: $(OBJS) $(USER_OBJS) /Users/jimmypan/Documents/GitHub/Projet_2A/STM32\ FLOW/STM32F746NGHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "F746disco-audio-processing-RTOS-TP-SIA.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/Users/jimmypan/Documents/GitHub/Projet_2A/STM32 FLOW/STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F746disco-audio-processing-RTOS-TP-SIA.map" -Wl,--gc-sections -static -L"/Users/jimmypan/Documents/GitHub/Projet_2A/STM32 FLOW/Drivers/CMSIS/Lib/GCC" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
