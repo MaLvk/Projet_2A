@@ -311,10 +311,32 @@ static void printIndex(uint32_t x){
 
 static void printdB(uint32_t x){
 	char dB[10];
-	sprintf(dB, "%lu Hz  ",x);
+	sprintf(dB, "%lu dB ",x);
 	LCD_SetStrokeColor(LCD_COLOR_BLACK);
 	LCD_DrawString(220,100,(uint8_t *)dB, LEFT_MODE, true);
 }
+
+float tab[9]={0,0,0,0,0,0,0,0,0};
+static void printTabfrequence(){
+	char index1[10];
+	char index2[10];
+	for(int k=0;k<9;k++){
+		uint32_t x =floor(tab[k]);
+		sprintf(index1, "%lu dB  ",x);
+		sprintf(index2, " %luHz ",40*k*5,56);
+		LCD_SetStrokeColor(LCD_COLOR_BLACK);
+
+		LCD_DrawString(50*k+30,100,(uint8_t *)index1, LEFT_MODE, true);
+		LCD_DrawString(48.5*k,115,(uint8_t *)index2, LEFT_MODE, true);
+
+	}
+
+	sprintf(index2, " %luHz ",40*9*5,56);
+	LCD_DrawString(48*9,115,(uint8_t *)index2, LEFT_MODE, true);
+}
+
+
+
 
 
 static void processAudio(int16_t *out, int16_t *in) {
@@ -362,7 +384,9 @@ static void processAudio(int16_t *out, int16_t *in) {
 	arm_cmplx_mag_f32(FFTOutput,FFTOutputMag,FFTLength/2);
 
 
-	for(int i=5;i<FFTLength/2;i++){
+	/*Implémentation par fréqauence*/
+
+	/*for(int i=5;i<360;i++){ //360=2000Hz
 		if(max<FFTOutputMag[i]){
 			max=FFTOutputMag[i];
 			index=i;
@@ -372,7 +396,26 @@ static void processAudio(int16_t *out, int16_t *in) {
 
 	printIndex(index*5.556);
 	printdB(max);
+	*/
+
+
+		/*Alternative par intervalle*/
+	 for (int i=0;i<9;i++){ //Atténuer les valeurs de nos intervalles
+			 tab[i]=tab[i]/1.02;
+		 }
+	 for (int i=0;i<360;i++){
+		 tab[i/40]=tab[i/40]+FFTOutputMag[i]/40;
+	 }
+
+	 printTabfrequence();
+
+
+
 	osSignalSet(uiTaskHandle, 0x0001);
+
+
+
+
 
 	LED_Off();
 }

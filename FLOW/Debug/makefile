@@ -79,8 +79,8 @@ all: main-build
 main-build: FLOW.elf secondary-outputs
 
 # Tool invocations
-FLOW.elf: $(OBJS) $(USER_OBJS) /Users/jimmypan/Documents/2A\ ENSEA/Projet\ Flow/FLOW/STM32F746NGHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "FLOW.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/Users/jimmypan/Documents/2A ENSEA/Projet Flow/FLOW/STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="FLOW.map" -Wl,--gc-sections -static -L"/Users/jimmypan/Documents/2A ENSEA/Projet Flow/FLOW/Drivers/CMSIS/Lib/GCC" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+FLOW.elf: $(OBJS) $(USER_OBJS) /Users/jimmypan/Documents/GitHub/Projet_2A/FLOW/STM32F746NGHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "FLOW.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/Users/jimmypan/Documents/GitHub/Projet_2A/FLOW/STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="FLOW.map" -Wl,--gc-sections -static -L"/Users/jimmypan/Documents/GitHub/Projet_2A/FLOW/Drivers/CMSIS/Lib/GCC" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
