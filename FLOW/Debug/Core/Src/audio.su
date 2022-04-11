@@ -7,4 +7,4 @@ audio.c:265:13:writeToAudioScratch	24	static
 audio.c:305:13:printIndex	40	static
 audio.c:312:13:printdB	40	static
 audio.c:320:13:printTabfrequence	48	static
-audio.c:342:13:processAudio	56	static
+audio.c:342:13:processAudio	96	static

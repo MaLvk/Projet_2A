@@ -42,19 +42,16 @@ void uiDisplayBasic(void) {
 	LCD_SetStrokeColor(LCD_COLOR_BLACK);
 	LCD_SetBackColor(LCD_COLOR_WHITE);
 	LCD_SetFont(&Font16);
-	LCD_DrawString(0, 0, (uint8_t*) "SIA 2021 - RT AUDIO FX", CENTER_MODE, true);
+	LCD_DrawString(0, 0, (uint8_t*) "FLOW", CENTER_MODE, true);
 
 	/* delay range */
 	LCD_DrawRect(60,20,360,30);
+
 	/* Init Vol, Delay, Feed */
 	LCD_SetFont(&Font12);
-	LCD_DrawString(428,15,(uint8_t *) "Volume", LEFT_MODE, true);
-	LCD_DrawString(440,245,(uint8_t *) "50 ", LEFT_MODE, true);
-	LCD_SetFillColor(LCD_COLOR_RED);
-	LCD_FillRect(436,100+36,29,200-100);
 
 	LCD_DrawString(LCD_SCREEN_WIDTH/2,60,(uint8_t *) "0 ms  ", LEFT_MODE, true);
-	LCD_DrawString(200,60,(uint8_t *) "Delay", LEFT_MODE, true);
+	LCD_DrawString(200,60,(uint8_t *) "Figure", LEFT_MODE, true);
 }
 
 /*

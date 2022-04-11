@@ -409,6 +409,15 @@ static void processAudio(int16_t *out, int16_t *in) {
 
 	 printTabfrequence();
 
+	 int a1=tab[0]; //Entre 0-200
+	 int a2=tab[1];//0-400
+	 int a3=tab[2];
+	 int a4=tab[3];
+     int a5=tab[4];
+	 int a6=tab[5];
+	 int a7=tab[6];
+	 int a8=tab[7];
+	 int a9=tab[8];
 
 
 	osSignalSet(uiTaskHandle, 0x0001);
