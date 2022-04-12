@@ -401,7 +401,7 @@ static void processAudio(int16_t *out, int16_t *in) {
 
 		/*Alternative par intervalle*/
 	 for (int i=0;i<9;i++){ //Atténuer les valeurs de nos intervalles
-			 tab[i]=tab[i]/1.02;
+			 tab[i]=tab[i]/1.06;
 		 }
 	 for (int i=0;i<360;i++){
 		 tab[i/40]=tab[i/40]+FFTOutputMag[i]/40;
