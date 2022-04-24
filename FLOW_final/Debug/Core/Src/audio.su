@@ -1,0 +1,10 @@
+audio.c:141:6:audioLoop	32	static
+audio.c:200:13:accumulateInputLevels	24	static
+audio.c:235:6:HAL_SAI_RxCpltCallback	16	static
+audio.c:244:6:HAL_SAI_RxHalfCpltCallback	16	static
+audio.c:255:14:readFromAudioScratch	24	static
+audio.c:266:13:writeToAudioScratch	24	static
+audio.c:306:13:printIndex	40	static
+audio.c:313:13:printdB	40	static
+audio.c:353:13:printTabfrequence	48	static
+audio.c:375:13:processAudio	56	static

@@ -1,0 +1,3 @@
+compteur.c:7:6:IncrementeCompteurLigne	16	static
+compteur.c:15:6:IncrementeCompteurColonne	16	static
+compteur.c:23:6:IncrementeCompteur	16	static

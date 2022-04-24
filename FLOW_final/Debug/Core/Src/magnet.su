@@ -1,0 +1,11 @@
+magnet.c:48:6:SetPulse	16	static
+magnet.c:60:6:ChangePulseTime	4	static
+magnet.c:68:6:ChangeFigure	16	static
+magnet.c:76:6:ChangeEnable	16	static
+magnet.c:95:6:Figure0	8	static
+magnet.c:120:6:Figure1	8	static
+magnet.c:164:6:Figure2	8	static
+magnet.c:207:6:Figure3	8	static
+magnet.c:250:6:Figure4	8	static
+magnet.c:293:6:Figure5	8	static
+magnet.c:368:6:Figure6	16	static
